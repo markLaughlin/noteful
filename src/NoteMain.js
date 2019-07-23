@@ -1,32 +1,49 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Main.css'
+import NotefulContext from "./NotefulContext"
 
-function NoteMain(props){
+class NoteMain extends Component{
 
-  console.log("NoteMain function ran")
-  console.log("Props passed into the NoteMain component")
-  console.log(props)
+  static contextType = NotefulContext
 
- 
-      return (
-          <div className="mainDiv">
-            <div className="noteDiv">
-              <h2>{props.currentNote.name}</h2>
-              Modified: {props.currentNote.modified}
-              <br/>
-              <button className="deleteNoteButton">delete</button>
-            </div>
-            
-            <div className="noteContentDiv">
-              {props.currentNote.content}
-            </div>
+  render(){
+    console.log("render method of the NoteMain component ran")
 
-          </div>      
-      );
+    let currentNote= this.context.contextNotes.find(note => note.id === this.props.match.params.noteId)
+    
+    let currentNoteName = ""
+    let currentNoteModified = ""
+    let currentNoteContent = ""
+    let currentNoteId = ""
+
+    if(currentNote){
+      currentNoteName = currentNote.name
+      currentNoteModified = currentNote.modified
+      currentNoteContent = currentNote.content
+      currentNoteId = currentNote.id
     }
-  
-  
+    
+    if(currentNoteName){
+
+      return (
+        <div className="mainDiv">
+          <div className="noteDiv">
+            <h2>{currentNoteName}</h2>
+            Modified: {currentNoteModified}
+            <br/>
+            <button className="deleteNoteButton" onClick={() => this.context.deleteNote(currentNoteId)}>delete</button>
+          </div>
+          
+          <div className="noteContentDiv">
+            {currentNoteContent}
+          </div>
+
+        </div>      
+      );
+    } else return (
+        <div className="mainDiv"></div>
+    )
+  }
+}
+
   export default NoteMain;
-/* 
-  The library passes in a prop called match into every route that is rendered. 
-  Inside this match object is another object called params */

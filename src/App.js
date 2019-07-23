@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom'
-import Data from './Data'
+// import Data from './Data'
 import MainSidebar from "./MainSidebar"
 import MainMain from "./MainMain"
 import FolderSidebar from "./FolderSidebar"
@@ -8,26 +8,61 @@ import FolderMain from "./FolderMain"
 import NoteSidebar from "./NoteSidebar"
 import NoteMain from "./NoteMain"
 import "./App.css"
+import NotefulContext from "./NotefulContext"
 
 class App extends Component{
 
-  constructor(props){
-    super(props)
+  state = {
+    apiNotes: [],
+    apiFolders: []
+};
 
-    const data = Data
+  componentDidMount(){
+    console.log("ComponentDidMount Ran")
+    fetch("http://localhost:9090/folders")
+    .then(response => response.json())
+    .then(responseJson => {
+      console.log("HERE COME THE FOLDERS")
+      console.log(responseJson)
+      this.setState({
+        apiFolders: responseJson,
+      }) 
+    }) 
+    // this.setState({ someProperty: { ...this.state.someProperty, flag: false} });
+    fetch("http://localhost:9090/notes")
+    .then(responseNotes => responseNotes.json())
+    .then(responseNotesJson => {
+      console.log("HERE COME THE NOTES!")
+      console.log(responseNotesJson)
+      this.setState({
+        apiNotes: responseNotesJson
+      })
+    }) 
+  }
 
-    this.state = {
-       stateData: data
-    }
+  deleteNote = (noteIdToDelete) => {
+    console.log("deleteNote ran")
+    console.log(noteIdToDelete)
+    const newArray = this.state.apiNotes.filter(item => item.id !== noteIdToDelete)
+    console.log("Here is the newArray, which does not contain the note to delete: ")
+    console.log(newArray)
+    this.setState({apiNotes: newArray})
   }
 
   render(){
     console.log("App component render method ran")
-    console.log("Here is the data set in state in the app component: ", this.state.stateData)
+    console.log("Here is Folders data set in state in the app component through the fetch request: ", this.state.apiFolders)
+    console.log("Here is Notes data set in state in the app component through the fetch request: ", this.state.apiNotes)
 
-    const data = this.state.stateData
+    const contextValue = {
+      contextFolders: this.state.apiFolders,
+      contextNotes: this.state.apiNotes,
+      deleteNote: this.deleteNote
+    }
 
     return (
+      <NotefulContext.Provider value={contextValue}>
+
       <div className="appDiv">
 
         <header>
@@ -41,82 +76,38 @@ class App extends Component{
         {/* Main Route */}
 
         <Route exact path='/' 
-              render={(routeProps) => {
-                console.log("Here are the routeProps: ")
-                console.log(routeProps)
-                return(
-                  <MainSidebar data={data}/>
-                )
-              }}
+          component={MainSidebar}
         /> 
 
         <Route exact path='/'
-            render={(routeProps) => {
-              console.log("Here are the route props again: ")
-              console.log(routeProps)
-                return(
-                  <MainMain data={data}/>
-                )
-            }}
+           component={MainMain}
         /> 
 
         {/* Folder Route */}
 
         <Route path="/folder/:folderId"
-            render={(routeProps) => {
-              console.log("Here are the routerProps: ")
-              console.log(routeProps)
-              return(
-                <FolderSidebar data={data}
-                currentFolder={data.folders.find(folder => folder.id === routeProps.match.params.folderId)}
-                />
-              )
-            }}
+          component={FolderSidebar}
         />
 
         <Route path="/folder/:folderId"
-            render={(routeProps) => {
-              console.log("Here are the routeProps again: ")
-              console.log(routeProps)
-              return(
-                <FolderMain data={data}
-                currentFolder={data.folders.find(folder => folder.id === routeProps.match.params.folderId)} 
-                allNotes = {data.notes}
-                />
-              )
-            }}
+          component={FolderMain}
         />
 
         {/* Note Route */}
 
         <Route path="/note/:noteId"
-            render={(routeProps) => {
-              console.log("Here are the routeProps for NoteSidebar: ")
-              console.log(routeProps)
-              console.log(routeProps.match.params)
-              return(
-                <NoteSidebar 
-                   onGoBack={() => routeProps.history.goBack()}
-                   currentNote={data.notes.find(note => note.id === routeProps.match.params.noteId)}
-                   data={data} 
-                />
-              )
-            }}
+          component={NoteSidebar}
         />
 
         <Route path="/note/:noteId"
-            render={(routeProps) => {
-              return(
-                <NoteMain 
-                  currentNote={data.notes.find(note => note.id === routeProps.match.params.noteId)} 
-                  />
-              )
-            }}
+          component={NoteMain}
         />
            
         </div>
 
       </div>
+      </NotefulContext.Provider>
+
     );
   }
 }

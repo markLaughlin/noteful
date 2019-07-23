@@ -1,19 +1,34 @@
 import React, { Component } from "react"
+import NotefulContext from "./NotefulContext"
 
 import "./Sidebar.css"
 
 class NoteSidebar extends Component{
 
-    render(){
+    static contextType = NotefulContext
 
-        console.log("render method of NoteSidebar Route component ran")
-        console.log("Here are the props in the NoteSidebar component: ")
-        console.log(this.props)
-        let currentNoteFolderId = this.props.currentNote.folderId;
-        console.log(currentNoteFolderId)
-        let currentFolder = this.props.data.folders.find(folder => folder.id === currentNoteFolderId)
-        console.log("CurrentFolder: ")
-        console.log(currentFolder) 
+    render(){
+        console.log("render method of NoteSidbar ran")
+
+        let currentNote = "currentNote to come"
+        let currentFolder = "currentFolder to come"
+
+
+        if(this.context.contextNotes){
+        currentNote= this.context.contextNotes.find(note => note.id === this.props.match.params.noteId)
+        }
+        
+        if(this.context.contextFolder){
+        let currentFolder = this.context.contextFolders.find(folder => folder.id === currentNote.folderId)
+        console.log("Here is the currentFolder: ")
+        console.log(currentFolder)
+        }
+
+        let currentFolderName = "currentFolder name to come"
+
+        if(currentFolder){
+            currentFolderName = currentFolder.name
+        }
 
         return(
 
@@ -21,12 +36,14 @@ class NoteSidebar extends Component{
                     <br/>
                     <br/>
                     <button className="goBackButton"
-                    onClick={this.props.onGoBack}
+                    onClick={this.props.history.goBack}
                     >Go Back</button>
-
+                    
+                    <div>
                     <h2> 
-                        {currentFolder.name}
+                        {currentFolderName}
                     </h2>
+                    </div>
                     
                 </div>
 
