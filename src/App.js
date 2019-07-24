@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom'
-// import Data from './Data'
 import MainSidebar from "./MainSidebar"
 import MainMain from "./MainMain"
 import FolderSidebar from "./FolderSidebar"
