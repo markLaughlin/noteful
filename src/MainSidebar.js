@@ -12,13 +12,16 @@ class MainSidebar extends Component{
     render(){
 
         console.log("render method of MainSidebar Route component ran")
- 
-       
-        console.log("Here is the data passed into the MainSidebar component through context: ")
-        console.log(this.context.contextData)
-        console.log("contextNotes and contextFolders")
+        console.log("this.context.contextFolders: ")
         console.log(this.context.contextFolders)
-        console.log(this.context.contextNotes)
+        console.log("this.context.contextFolders[0]: ")
+        console.log(this.context.contextFolders[0])
+
+        console.log("this.context.contextFolders[0].name: ")
+
+        if(this.context.contextFolders[0]){
+            console.log(this.context.contextFolders[0].name)
+        }
 
         let allFolders =  this.context.contextFolders.map(folder=> 
             <div key={folder.id} className="folderDiv">
@@ -32,7 +35,9 @@ class MainSidebar extends Component{
 
                 <div className="sidebarDiv">
                         {allFolders}
+                    <Link to="/addfolder">
                     <button className="folderButton">Add New Folder</button>
+                    </Link>
                 </div>
 
         )

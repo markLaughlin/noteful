@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import {  NavLink } from 'react-router-dom'
+import {  NavLink, Link } from 'react-router-dom'
 import "./Sidebar.css"
 import NotefulContext from "./NotefulContext"
 
@@ -10,9 +10,7 @@ class FolderSidebar extends Component{
     render(){
 
         console.log("render method of FolderSidebar Route component ran")
-        console.log("Here are the Route props passed in .match.params.folderId: ")
-        console.log(this.props.match.params.folderId)
-        
+
         let allFolders =  this.context.contextFolders.map(folder=>
  
             <div key={folder.id} className="folderDiv">
@@ -27,7 +25,9 @@ class FolderSidebar extends Component{
 
                 <div className="sidebarDiv">
                     {allFolders}
+                    <Link to="/addfolder">
                     <button className="folderButton">Add New Folder</button>
+                    </Link>
                 </div>
 
         )

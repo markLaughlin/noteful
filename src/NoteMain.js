@@ -1,49 +1,74 @@
 import React, { Component } from 'react';
 import './Main.css'
+import { Link } from "react-router-dom"
 import NotefulContext from "./NotefulContext"
 
 class NoteMain extends Component{
 
   static contextType = NotefulContext
-
+  
   render(){
-    console.log("render method of the NoteMain component ran")
+      console.log("render method of NoteMain Route component ran")
 
-    let currentNote= this.context.contextNotes.find(note => note.id === this.props.match.params.noteId)
-    
-    let currentNoteName = ""
-    let currentNoteModified = ""
-    let currentNoteContent = ""
-    let currentNoteId = ""
+      let showNote = true
 
-    if(currentNote){
-      currentNoteName = currentNote.name
-      currentNoteModified = currentNote.modified
-      currentNoteContent = currentNote.content
-      currentNoteId = currentNote.id
-    }
-    
-    if(currentNoteName){
+      let allNotes = this.context.contextNotes;
+      console.log("allNotes: ")
+      console.log(allNotes)
 
-      return (
-        <div className="mainDiv">
-          <div className="noteDiv">
-            <h2>{currentNoteName}</h2>
-            Modified: {currentNoteModified}
+      let currentNoteId = this.props.match.params.noteId
+      console.log("currentNoteId")
+      console.log(currentNoteId)
+
+      let currentNote = allNotes.filter(item => item.id === currentNoteId)
+      console.log("currentNote: ")
+      console.log(currentNote)
+      if(currentNote.length === 1){
+        console.log("currentNoteId is in allNotes")
+      } 
+      else {
+        console.log("currentNoteId is not in allNotes")
+        showNote = false
+      }
+
+      if(showNote){
+        let displayNote = allNotes.filter(item => item.id === currentNoteId)
+        console.log("displayNote: ")
+        console.log(displayNote)
+
+        return (
+          <div className="mainDiv">
+            <h2>{displayNote[0].name}</h2>
+
+            <div className="noteDiv">
+
+              <div className="noteContentDiv">
+              {displayNote[0].content}
+              </div>
+
+            </div>
+
             <br/>
-            <button className="deleteNoteButton" onClick={() => this.context.deleteNote(currentNoteId)}>delete</button>
-          </div>
-          
-          <div className="noteContentDiv">
-            {currentNoteContent}
-          </div>
+            Modified: {displayNote[0].modified}
+            <br/>
+            <br/>
 
-        </div>      
+            <button className="bigNoteButton" 
+            onClick={() => this.context.deleteNote(currentNoteId)}>Delete Note
+            </button>
+            <br/>
+
+            <Link to="/addNote">
+            <button className="bigNoteButton">Add Note</button>
+            </Link>
+
+          </div>      
       );
-    } else return (
-        <div className="mainDiv"></div>
-    )
+      }
+      else return( 
+          <div className="mainDiv"></div>
+          );
   }
 }
-
+  
   export default NoteMain;

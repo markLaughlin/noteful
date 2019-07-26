@@ -8,34 +8,39 @@ import NoteSidebar from "./NoteSidebar"
 import NoteMain from "./NoteMain"
 import "./App.css"
 import NotefulContext from "./NotefulContext"
+import AddFolder from "./AddFolder"
+import AddNote from "./AddNote"
 
 class App extends Component{
 
   state = {
-    apiNotes: [],
-    apiFolders: []
+    apiFolders: [],
+    apiNotes: []
 };
 
   componentDidMount(){
     console.log("ComponentDidMount Ran")
     fetch("http://localhost:9090/folders")
     .then(response => response.json())
-    .then(responseJson => {
-      console.log("HERE COME THE FOLDERS")
-      console.log(responseJson)
+    .then(responseFoldersJson => {
+      console.log("HERE COME THE FOLDERS; folders to be set in state")
+      console.log("responseFoldersJson:")
+      console.log(responseFoldersJson)
       this.setState({
-        apiFolders: responseJson,
-      }) 
+        apiFolders: responseFoldersJson,
+      })
+      console.log("this.setState for folders just ran")
     }) 
-    // this.setState({ someProperty: { ...this.state.someProperty, flag: false} });
     fetch("http://localhost:9090/notes")
     .then(responseNotes => responseNotes.json())
     .then(responseNotesJson => {
-      console.log("HERE COME THE NOTES!")
+      console.log("HERE COME THE NOTES; notes to be set in state")
+      console.log("responseNotesJson:")
       console.log(responseNotesJson)
       this.setState({
         apiNotes: responseNotesJson
       })
+      console.log("this.setState for notes just ran")
     }) 
   }
 
@@ -49,15 +54,18 @@ class App extends Component{
   }
 
   render(){
-    console.log("App component render method ran")
-    console.log("Here is Folders data set in state in the app component through the fetch request: ", this.state.apiFolders)
-    console.log("Here is Notes data set in state in the app component through the fetch request: ", this.state.apiNotes)
-
+    console.log("App component render method ran")  
+    console.log("this.context.contextFolders BEFORE contextValue variable declared and set to state")
+    console.log(this.context.contextFolders)
+    
     const contextValue = {
       contextFolders: this.state.apiFolders,
       contextNotes: this.state.apiNotes,
       deleteNote: this.deleteNote
     }
+
+    console.log("this.context.contextFolders AFTER contextValue variable declared and set to state")
+    console.log(this.context.contextFolders)
 
     return (
       <NotefulContext.Provider value={contextValue}>
@@ -101,9 +109,16 @@ class App extends Component{
         <Route path="/note/:noteId"
           component={NoteMain}
         />
+
+        <Route path="/addfolder"
+          component={AddFolder}
+        />
+
+        <Route path="/addnote"
+          component={AddNote}
+        />
            
         </div>
-
       </div>
       </NotefulContext.Provider>
 

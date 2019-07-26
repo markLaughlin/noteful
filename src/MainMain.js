@@ -9,6 +9,10 @@ class MainMain extends Component{
   
     render(){
       console.log("render method of MainMain Route component ran")
+      console.log("this.context.contextNotes: ")
+      console.log(this.context.contextNotes)
+      console.log("this.context.contextNotes[0]: ")
+      console.log(this.context.contextNotes[0])
 
       let allNotes = this.context.contextNotes.map(note => 
               <div key={note.id} className="noteDiv">
@@ -25,7 +29,10 @@ class MainMain extends Component{
 
               {allNotes}
 
-            <button className="addNoteButton">Add Note</button>
+            <Link to="addnote">
+            <button className="bigNoteButton">Add Note</button>
+            </Link>
+
           </div>      
       );
     }
