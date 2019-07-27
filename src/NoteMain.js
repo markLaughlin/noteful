@@ -55,7 +55,21 @@ class NoteMain extends Component{
             <br/>
 
             <button className="bigNoteButton" 
-            onClick={() => this.context.deleteNote(currentNoteId)}>Delete Note
+            onClick={
+              () => {
+                console.log("onClick worked")
+
+                fetch(`http://localhost:9090/notes/${currentNoteId}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                })
+                .then(() => this.context.deleteNote(currentNoteId))
+              }//arrow function
+            }//onClick
+            >
+              Delete Note
             </button>
             <br/>
 

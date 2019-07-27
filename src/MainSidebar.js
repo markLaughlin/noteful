@@ -12,13 +12,8 @@ class MainSidebar extends Component{
     render(){
 
         console.log("render method of MainSidebar Route component ran")
-        console.log("this.context.contextFolders: ")
-        console.log(this.context.contextFolders)
-        console.log("this.context.contextFolders[0]: ")
-        console.log(this.context.contextFolders[0])
-
-        console.log("this.context.contextFolders[0].name: ")
-
+       
+       
         if(this.context.contextFolders[0]){
             console.log(this.context.contextFolders[0].name)
         }

@@ -55,17 +55,13 @@ class App extends Component{
 
   render(){
     console.log("App component render method ran")  
-    console.log("this.context.contextFolders BEFORE contextValue variable declared and set to state")
-    console.log(this.context.contextFolders)
+   
     
     const contextValue = {
       contextFolders: this.state.apiFolders,
       contextNotes: this.state.apiNotes,
       deleteNote: this.deleteNote
     }
-
-    console.log("this.context.contextFolders AFTER contextValue variable declared and set to state")
-    console.log(this.context.contextFolders)
 
     return (
       <NotefulContext.Provider value={contextValue}>
